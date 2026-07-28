@@ -488,14 +488,11 @@ function renderSleep(b){
   const ed=document.createElement("div");ed.className="panel";b.appendChild(ed);
   const row=document.createElement("div");row.style.display="flex";row.style.gap="10px";
   row.innerHTML=`<div style="flex:1"><div style="font-size:12px;color:var(--muted);margin-bottom:4px">入睡</div><input id="bed" type="time" class="finput" value="${s.bed||""}"/></div>
-    <div style="flex:1"><div style="font-size:12px;color:var(--muted);margin-bottom:4px">起床</div><input id="wake" type="time" class="finput" value="${s.wake||""}"/></div>
-    <div style="flex:1"><div style="font-size:12px;color:var(--muted);margin-bottom:4px">时长</div><input id="dur" class="finput" readonly style="background:#eaf2f6" value=""/></div>`;
+    <div style="flex:1"><div style="font-size:12px;color:var(--muted);margin-bottom:4px">起床</div><input id="wake" type="time" class="finput" value="${s.wake||""}"/></div>`;
   ed.appendChild(row);
-  const bed=ed.querySelector("#bed"),wake=ed.querySelector("#wake"),dur=ed.querySelector("#dur");
-  const calc=()=>{if(s.bed&&s.wake){const[bh,bm]=s.bed.split(":").map(Number),[wh,wm]=s.wake.split(":").map(Number);let mn=(wh*60+wm)-(bh*60+bm);if(mn<=0)mn+=1440;dur.value=(mn/60).toFixed(1)+" h";}else dur.value="";};
-  bed.onchange=()=>{s.bed=bed.value;save();calc();renderHome();};
-  wake.onchange=()=>{s.wake=wake.value;save();calc();renderHome();};
-  calc();
+  const bed=ed.querySelector("#bed"),wake=ed.querySelector("#wake");
+  bed.onchange=()=>{s.bed=bed.value;save();renderHome();};
+  wake.onchange=()=>{s.wake=wake.value;save();renderHome();};
 }
 
 /* ---------- 工作（已投递 + 待投） ---------- */
