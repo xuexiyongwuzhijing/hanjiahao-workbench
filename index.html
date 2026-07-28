@@ -18,7 +18,7 @@
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{margin:0;font-family:"PingFang SC",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Microsoft YaHei","Segoe UI",sans-serif;
-    background:linear-gradient(165deg,#eaf4f8 0%,#e4eef3 100%);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+    background:linear-gradient(165deg,#eaf4f8 0%,#e4eef3 100%);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   .phone{max-width:440px;margin:0 auto;min-height:100vh;background:linear-gradient(180deg,#f0f7fa 0%,#f6fafc 55%,#e9f2f6 100%);position:relative;display:flex;flex-direction:column}
 
   .topbar{display:flex;align-items:center;gap:10px;padding:14px 16px 6px}
@@ -498,12 +498,13 @@ function renderSleep(b){
   b.appendChild(title);
   const ed=document.createElement("div");ed.className="panel";ed.style.padding="16px";b.appendChild(ed);
   const row=document.createElement("div");row.className="sleep-row";
-  row.innerHTML=`<div class="field"><label>起床时间</label><input id="wake" type="time" class="finput" value="${s.wake||""}"/></div>
-    <div class="field"><label>入睡时间</label><input id="bed" type="time" class="finput" value="${s.bed||""}"/></div>`;
+  row.innerHTML=`<div class="field"><label>起床时间</label><input id="wake" type="text" inputmode="numeric" class="finput" placeholder="如 07:30" value="${s.wake||""}"/></div>
+    <div class="field"><label>入睡时间</label><input id="bed" type="text" inputmode="numeric" class="finput" placeholder="如 23:00" value="${s.bed||""}"/></div>`;
   ed.appendChild(row);
   const bed=ed.querySelector("#bed"),wake=ed.querySelector("#wake");
-  bed.onchange=()=>{s.bed=bed.value;save();renderHome();};
-  wake.onchange=()=>{s.wake=wake.value;save();renderHome();};
+  const tidy=t=>{t=(t||"").replace(/[^\d:]/g,"").slice(0,5);return t;};
+  bed.oninput=()=>{s.bed=tidy(bed.value);bed.value=s.bed;save();renderHome();};
+  wake.oninput=()=>{s.wake=tidy(wake.value);wake.value=s.wake;save();renderHome();};
 }
 
 /* ---------- 工作（已投递 + 待投） ---------- */
