@@ -33,7 +33,7 @@
   .mode.ok{background:color-mix(in srgb,var(--c-task) 15%,#fff);color:var(--c-task)}
   .mode.off{background:color-mix(in srgb,var(--c-en) 20%,#fff);color:var(--c-en)}
 
-  .scroll{flex:1;overflow-y:auto;padding:6px 14px 90px}
+  .scroll{flex:1;overflow-y:auto;padding:6px 14px 60px}
   #err{display:none;background:#e8f0f5;color:var(--c-fit);border:1px solid #c8d8e0;border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:12px}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -96,7 +96,6 @@
   .field{margin-top:10px}
   .field label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
 
-  .footer{text-align:center;color:var(--muted);font-size:11px;padding:14px}
   #toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(38,55,65,.92);color:#fff;font-size:13px;padding:9px 16px;border-radius:20px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50}
   #toast.show{opacity:1}
 
@@ -140,7 +139,6 @@
     <div id="err"></div>
     <div id="greet" class="greet"></div>
     <div class="grid" id="grid"></div>
-    <div class="footer">数据已集中收集到后台 · 切换日期可回看/补录</div>
   </div>
 </div>
 
