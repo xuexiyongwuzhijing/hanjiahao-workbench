@@ -128,6 +128,7 @@
   .sleep-row .field{width:100%}
   .sleep-row .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
   .sleep-row .field input{width:100%;box-sizing:border-box}
+  .stime{width:100%;max-width:100%;min-width:0;-webkit-appearance:none;appearance:none}
   .delx{margin-left:auto;color:#b8c4c8;font-weight:700;font-size:16px;cursor:pointer}
   .coll-head{display:flex;align-items:center;cursor:pointer}
   .coll-head .arr{margin-left:auto;color:var(--muted);font-size:18px}
@@ -482,10 +483,7 @@ function renderSleep(b){
     getInfo:ds=>{
       const s=allStore[ds]&&allStore[ds].sleep;
       if(!s||(!s.bed&&!s.wake))return "";
-      const a=[],w=s.wake||"--",bd=s.bed||"--";
-      if(s.wake)a.push("起床 "+w);
-      if(s.bed)a.push("入睡 "+bd);
-      return a.join("\n");
+      return (s.wake||"")+"\n"+(s.bed||"");
     },
     onPick:ds=>{slSel=ds;renderSleep(b);},
     onNav:(y,m)=>{slY=y;slM=m;renderSleep(b);}
@@ -498,13 +496,12 @@ function renderSleep(b){
   b.appendChild(title);
   const ed=document.createElement("div");ed.className="panel";ed.style.padding="16px";b.appendChild(ed);
   const row=document.createElement("div");row.className="sleep-row";
-  row.innerHTML=`<div class="field"><label>起床时间</label><input id="wake" type="text" inputmode="numeric" class="finput" placeholder="如 07:30" value="${s.wake||""}"/></div>
-    <div class="field"><label>入睡时间</label><input id="bed" type="text" inputmode="numeric" class="finput" placeholder="如 23:00" value="${s.bed||""}"/></div>`;
+  row.innerHTML=`<div class="field"><label>起床时间</label><input id="wake" type="time" class="finput stime" value="${s.wake||""}"/></div>
+    <div class="field"><label>入睡时间</label><input id="bed" type="time" class="finput stime" value="${s.bed||""}"/></div>`;
   ed.appendChild(row);
   const bed=ed.querySelector("#bed"),wake=ed.querySelector("#wake");
-  const tidy=t=>{t=(t||"").replace(/[^\d:]/g,"").slice(0,5);return t;};
-  bed.oninput=()=>{s.bed=tidy(bed.value);bed.value=s.bed;save();renderHome();};
-  wake.oninput=()=>{s.wake=tidy(wake.value);wake.value=s.wake;save();renderHome();};
+  bed.onchange=()=>{s.bed=bed.value;save();renderHome();};
+  wake.onchange=()=>{s.wake=wake.value;save();renderHome();};
 }
 
 /* ---------- 工作（已投递 + 待投） ---------- */
