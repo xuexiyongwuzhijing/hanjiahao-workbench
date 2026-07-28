@@ -124,8 +124,8 @@
   .tag.fit{background:color-mix(in srgb,var(--c-fit) 14%,#fff);color:var(--c-fit)}
   .finput{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;font-size:14px;outline:none;background:#f7fafb;box-sizing:border-box;min-width:0}
   .finput:focus{border-color:var(--c-task)}
-  .sleep-row{display:flex;gap:14px}
-  .sleep-row .field{flex:1;min-width:0}
+  .sleep-row{display:flex;flex-direction:column;gap:12px}
+  .sleep-row .field{width:100%}
   .sleep-row .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
   .sleep-row .field input{width:100%;box-sizing:border-box}
   .delx{margin-left:auto;color:#b8c4c8;font-weight:700;font-size:16px;cursor:pointer}
@@ -491,8 +491,8 @@ function renderSleep(b){
   b.appendChild(title);
   const ed=document.createElement("div");ed.className="panel";ed.style.padding="16px";b.appendChild(ed);
   const row=document.createElement("div");row.className="sleep-row";
-  row.innerHTML=`<div class="field"><label>入睡</label><input id="bed" type="time" class="finput" value="${s.bed||""}"/></div>
-    <div class="field"><label>起床</label><input id="wake" type="time" class="finput" value="${s.wake||""}"/></div>`;
+  row.innerHTML=`<div class="field"><label>起床时间</label><input id="wake" type="time" class="finput" value="${s.wake||""}"/></div>
+    <div class="field"><label>入睡时间</label><input id="bed" type="time" class="finput" value="${s.bed||""}"/></div>`;
   ed.appendChild(row);
   const bed=ed.querySelector("#bed"),wake=ed.querySelector("#wake");
   bed.onchange=()=>{s.bed=bed.value;save();renderHome();};
