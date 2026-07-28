@@ -122,8 +122,12 @@
   .rowbox .top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
   .tag{padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600}
   .tag.fit{background:color-mix(in srgb,var(--c-fit) 14%,#fff);color:var(--c-fit)}
-  .finput{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;font-size:14px;outline:none;background:#f7fafb}
+  .finput{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;font-size:14px;outline:none;background:#f7fafb;box-sizing:border-box;min-width:0}
   .finput:focus{border-color:var(--c-task)}
+  .sleep-row{display:flex;gap:14px}
+  .sleep-row .field{flex:1;min-width:0}
+  .sleep-row .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+  .sleep-row .field input{width:100%;box-sizing:border-box}
   .delx{margin-left:auto;color:#b8c4c8;font-weight:700;font-size:16px;cursor:pointer}
   .coll-head{display:flex;align-items:center;cursor:pointer}
   .coll-head .arr{margin-left:auto;color:var(--muted);font-size:18px}
@@ -485,10 +489,10 @@ function renderSleep(b){
   const s=day.sleep;
   const title=document.createElement("div");title.style.cssText="font-weight:700;font-size:16px;margin:14px 0 10px";title.textContent=slSel+" 睡眠记录";
   b.appendChild(title);
-  const ed=document.createElement("div");ed.className="panel";b.appendChild(ed);
-  const row=document.createElement("div");row.style.display="flex";row.style.gap="16px";
-  row.innerHTML=`<div style="flex:1;min-width:0"><div style="font-size:12px;color:var(--muted);margin-bottom:6px">入睡</div><input id="bed" type="time" class="finput" style="padding:11px 8px" value="${s.bed||""}"/></div>
-    <div style="flex:1;min-width:0"><div style="font-size:12px;color:var(--muted);margin-bottom:6px">起床</div><input id="wake" type="time" class="finput" style="padding:11px 8px" value="${s.wake||""}"/></div>`;
+  const ed=document.createElement("div");ed.className="panel";ed.style.padding="16px";b.appendChild(ed);
+  const row=document.createElement("div");row.className="sleep-row";
+  row.innerHTML=`<div class="field"><label>入睡</label><input id="bed" type="time" class="finput" value="${s.bed||""}"/></div>
+    <div class="field"><label>起床</label><input id="wake" type="time" class="finput" value="${s.wake||""}"/></div>`;
   ed.appendChild(row);
   const bed=ed.querySelector("#bed"),wake=ed.querySelector("#wake");
   bed.onchange=()=>{s.bed=bed.value;save();renderHome();};
