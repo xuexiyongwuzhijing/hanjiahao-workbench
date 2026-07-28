@@ -479,7 +479,14 @@ function renderSleep(b){
   // 日历（点击日期切换下方当天睡眠）
   const cal=buildCalendar({
     year:slY,month:slM,selected:slSel,
-    getInfo:ds=>{const s=allStore[ds]&&allStore[ds].sleep;return(s&&s.bed)?(s.bed+"\n"+(s.wake||"")):"";},
+    getInfo:ds=>{
+      const s=allStore[ds]&&allStore[ds].sleep;
+      if(!s||(!s.bed&&!s.wake))return "";
+      const a=[],w=s.wake||"--",bd=s.bed||"--";
+      if(s.wake)a.push("起床 "+w);
+      if(s.bed)a.push("入睡 "+bd);
+      return a.join("\n");
+    },
     onPick:ds=>{slSel=ds;renderSleep(b);},
     onNav:(y,m)=>{slY=y;slM=m;renderSleep(b);}
   });
