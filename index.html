@@ -136,16 +136,7 @@
 </head>
 <body>
 <div class="phone">
-  <div class="topbar">
-    <button id="prev">‹</button>
-    <div class="d"><div class="day" id="day">--</div><div class="w" id="week">--</div></div>
-    <button id="next">›</button>
-    <div class="spacer"></div>
-    <span id="modeTag" class="mode off">● 离线</span>
-    <button id="today" style="width:auto;padding:0 12px;font-size:13px">今天</button>
-  </div>
-
-  <div class="scroll" id="home">
+  <div class="scroll" id="home" style="padding-top:14px">
     <div id="err"></div>
     <div id="greet" class="greet"></div>
     <div class="grid" id="grid"></div>
@@ -240,8 +231,8 @@ function renderGreet(){
   el.innerHTML=`<div class="emo">${emo}</div><div class="txt">${g}，Ka222a</div><div class="sub">${ymd0(cur).slice(5).replace("-","/")} · 周${WEEK[cur.getDay()]}</div>`;
 }
 function renderHome(){
-  document.getElementById("day").textContent=ymd0(cur).slice(5);
-  document.getElementById("week").textContent="周"+WEEK[cur.getDay()]+" · "+ymd0(cur);
+  const dayEl=document.getElementById("day");if(dayEl)dayEl.textContent=ymd0(cur).slice(5);
+  const weekEl=document.getElementById("week");if(weekEl)weekEl.textContent="周"+WEEK[cur.getDay()]+" · "+ymd0(cur);
   renderGreet();
   const grid=document.getElementById("grid");grid.innerHTML="";
   MODULES.forEach(m=>{
@@ -563,9 +554,9 @@ function collapsible(title,contentFn){
 
 /* ---------- 日期切换（影响 任务/英语/记账 的当日数据） ---------- */
 async function goto(fn){fn();await load();renderHome();}
-document.getElementById("prev").onclick=()=>goto(()=>cur.setDate(cur.getDate()-1));
-document.getElementById("next").onclick=()=>goto(()=>cur.setDate(cur.getDate()+1));
-document.getElementById("today").onclick=()=>goto(()=>cur=new Date());
+const prevBtn=document.getElementById("prev");if(prevBtn)prevBtn.onclick=()=>goto(()=>cur.setDate(cur.getDate()-1));
+const nextBtn=document.getElementById("next");if(nextBtn)nextBtn.onclick=()=>goto(()=>cur.setDate(cur.getDate()+1));
+const todayBtn=document.getElementById("today");if(todayBtn)todayBtn.onclick=()=>goto(()=>cur=new Date());
 
 /* ---------- toast ---------- */
 let toastTimer;
