@@ -35,7 +35,7 @@
   .mode.ok{background:color-mix(in srgb,var(--c-task) 15%,#fff);color:var(--c-task)}
   .mode.off{background:color-mix(in srgb,var(--c-en) 20%,#fff);color:var(--c-en)}
 
-  .scroll{flex:1;overflow-y:auto;padding:6px 14px 60px}
+  .scroll{flex:1;overflow-y:auto;padding:6px 14px 40px}
   #err{display:none;background:#e8f0f5;color:var(--c-fit);border:1px solid #c8d8e0;border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:12px}
 
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -46,9 +46,10 @@
   .mcard .nm{font-size:16px;font-weight:800;color:#1a3a52}
   .mcard .st{font-size:12px;color:var(--muted);margin-top:5px;min-height:17px}
   .greet{text-align:center;padding:6px 4px 16px}
-  .greet .emo{font-size:42px;line-height:78px;display:inline-block;width:78px;height:78px;border-radius:50%;background:linear-gradient(135deg,#d4e8f2,#b8d8e8);box-shadow:var(--shadow)}
-  .greet .txt{font-size:21px;font-weight:800;margin-top:10px;letter-spacing:.5px}
-  .greet .sub{font-size:12px;color:var(--muted);margin-top:3px}
+  .greet .quote{font-size:18px;font-weight:800;line-height:1.6;color:#1a3a52;letter-spacing:.3px}
+  .greet .quote::before{content:"\"";color:var(--c-task);margin-right:3px;font-size:22px}
+  .greet .quote::after{content:"\"";color:var(--c-task);margin-left:3px;font-size:22px}
+  .greet .sub{font-size:11px;color:var(--muted);margin-top:6px}
 
   #detail{position:fixed;inset:0;max-width:440px;margin:0 auto;background:var(--bg);display:none;flex-direction:column;z-index:20}
   #detail.show{display:flex}
@@ -229,14 +230,48 @@ function moduleStatus(key){
   if(key==="job"){const w=allStore._work||{applied:[],pending:[]};return{txt:"已投 "+(w.applied||[]).length+" · 待投 "+(w.pending||[]).length,pct:((w.applied||[]).length+(w.pending||[]).length)?100:0};}
   if(key==="acc"){const now=new Date();const pre=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");const t=monthTotals(pre);return{txt:"本月已支出 "+t.out.toFixed(0)+" 元",pct:0};}
 }
+const QUOTES=[
+  "今天开始改变，明天你会感谢自己。",
+  "每一滴汗水，都是脂肪在哭泣。",
+  "自律即自由，坚持即胜利。",
+  "你不是在减肥，你是在夺回身体的主权。",
+  "慢慢来，比较快。",
+  "今天的克制，换来明天的自信。",
+  "没有人能定义你，除了你自己。",
+  "身体不会辜负每一份努力。",
+  "减肥不是一场冲刺，而是一场马拉松。",
+  "先完成，再完美。",
+  "你的坚持，终将美好。",
+  "不要害怕开始，你已经在路上了。",
+  "每天进步一点点，一年后惊艳所有人。",
+  "你吃的每一口，都会写进身材里。",
+  "管住嘴，迈开腿，剩下的交给时间。",
+  "真正的强大，是掌控自己的身体。",
+  "不为别人，只为成为更好的自己。",
+  "再坚持一下，奇迹就在下一秒。",
+  "行动起来，焦虑就会消失。",
+  "你比你想象中更有力量。",
+  "别让今天的放纵，毁掉昨天的努力。",
+  "每一次拒绝诱惑，都是对自己的投资。",
+  "好身材，是最高级的自律。",
+  "时间看得见，你的身体也看得见。",
+  "不积跬步，无以至千里。",
+  "吃得苦中苦，方为人上人。",
+  "坚持下去，你会爱上镜子里的自己。",
+  "减肥这件事，只要不死，就往死里瘦。",
+  "梦想身材不是等来的，是练出来的。",
+  "你值得拥有更健康、更轻盈的人生。"
+];
+function dayOfYear(d){
+  const start=new Date(d.getFullYear(),0,0);
+  const diff=d-start;
+  return Math.floor(diff/(1000*60*60*24));
+}
 function renderGreet(){
-  const h=new Date().getHours();
-  let g,emo;
-  if(h>=5&&h<12){g="早上好";emo="🌞";}
-  else if(h>=12&&h<18){g="下午好";emo="⛅";}
-  else{g="晚上好";emo="🌙";}
+  const idx=dayOfYear(cur)%QUOTES.length;
+  const quote=QUOTES[idx];
   const el=document.getElementById("greet");
-  el.innerHTML=`<div class="emo">${emo}</div><div class="txt">${g}，Ka222a</div><div class="sub">${ymd0(cur).slice(5).replace("-","/")} · 周${WEEK[cur.getDay()]}</div>`;
+  el.innerHTML=`<div class="quote">${quote}</div><div class="sub">${ymd0(cur).slice(5).replace("-","/")} · 周${WEEK[cur.getDay()]} · 每日一语</div>`;
 }
 function renderHome(){
   const dayEl=document.getElementById("day");if(dayEl)dayEl.textContent=ymd0(cur).slice(5);
