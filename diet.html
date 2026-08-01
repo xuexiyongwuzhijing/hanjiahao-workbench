@@ -1558,6 +1558,21 @@ function renderStats(b){
     toast("已导出");
   };
   b.appendChild(exportBtn);
+
+  // 清空数据
+  const clrBtn=document.createElement("button");clrBtn.className="tbl-add";clrBtn.style.marginTop="4px";
+  clrBtn.style.borderColor="#ffcdd2";clrBtn.style.color="#d65a5a";clrBtn.style.background="#fff5f5";
+  clrBtn.textContent="🗑 清空所有记录";
+  let clrConfirm=false;
+  clrBtn.onclick=async()=>{
+    if(!clrConfirm){clrConfirm=true;clrBtn.textContent="⚠ 确认清空？再点一次";clrBtn.style.background="#ffe0e0";return;}
+    const s=allStore._settings||{};
+    allStore={_settings:s};
+    if(mode==="backend"){try{await fetch("/api/wl/data",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(allStore)});}catch(e){}}
+    localStorage.setItem(LS_KEY,JSON.stringify(allStore));
+    renderHome();back();toast("已清空所有记录");
+  };
+  b.appendChild(clrBtn);
 }
 
 /* ========== Toast ========== */
