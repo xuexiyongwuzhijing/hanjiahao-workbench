@@ -29,7 +29,14 @@
   .topbar .mode.ok{background:color-mix(in srgb,var(--c-weight) 15%,#fff);color:var(--c-weight)}
   .topbar .mode.off{background:color-mix(in srgb,var(--c-weight) 20%,#fff);color:var(--c-weight)}
 
-  .scroll{flex:1;overflow-y:auto;padding:6px 14px 60px}
+  .scroll{flex:1;overflow-y:auto;padding:6px 14px 40px}
+
+  /* ---- 励志语录 ---- */
+  .quote-bar{text-align:center;padding:10px 16px 14px}
+  .quote-bar .q{font-size:16px;font-weight:700;line-height:1.6;color:#1a4a3a;letter-spacing:.3px}
+  .quote-bar .q::before{content:"\201C";color:var(--c-weight);margin-right:2px;font-size:20px}
+  .quote-bar .q::after{content:"\201D";color:var(--c-weight);margin-left:2px;font-size:20px}
+  .quote-bar .sub{font-size:11px;color:var(--muted);margin-top:4px}
 
   /* ---- Hero 仪表盘 ---- */
   .hero{background:linear-gradient(145deg,#5bb89a 0%,#3fae8e 100%);border-radius:22px;padding:22px 18px;color:#fff;box-shadow:0 8px 28px rgba(70,160,130,.25);margin-bottom:14px;position:relative;overflow:hidden}
@@ -231,14 +238,13 @@
 <body>
 <div class="phone">
   <div class="topbar">
-    <a href="index.html" style="font-size:13px;font-weight:700;color:#3fae8e;background:#e8f5f0;border:none;border-radius:20px;padding:6px 14px;text-decoration:none;white-space:nowrap">‹ 工作台</a>
     <span class="ttl">减肥记录</span>
     <span class="spacer"></span>
     <span class="mode off" id="modeTag"></span>
   </div>
   <div class="scroll" id="home" style="padding-top:6px">
+    <div id="quoteBar" class="quote-bar"></div>
     <div id="heroDiv"></div>
-    <div id="miniChartDiv"></div>
     <div class="grid" id="grid"></div>
   </div>
 </div>
@@ -510,6 +516,52 @@ function dayCalories(date){
 }
 
 /* ========== Hero 仪表盘 ========== */
+/* ========== 每日励志语录 ========== */
+const QUOTES=[
+  "今天开始改变，明天你会感谢自己。",
+  "每一滴汗水，都是脂肪在哭泣。",
+  "自律即自由，坚持即胜利。",
+  "你不是在减肥，你是在夺回身体的主权。",
+  "慢慢来，比较快。",
+  "今天的克制，换来明天的自信。",
+  "没有人能定义你，除了你自己。",
+  "身体不会辜负每一份努力。",
+  "减肥不是一场冲刺，而是一场马拉松。",
+  "先完成，再完美。",
+  "你的坚持，终将美好。",
+  "不要害怕开始，你已经在路上了。",
+  "每天进步一点点，一年后惊艳所有人。",
+  "你吃的每一口，都会写进身材里。",
+  "管住嘴，迈开腿，剩下的交给时间。",
+  "真正的强大，是掌控自己的身体。",
+  "不为别人，只为成为更好的自己。",
+  "再坚持一下，奇迹就在下一秒。",
+  "行动起来，焦虑就会消失。",
+  "你比你想象中更有力量。",
+  "别让今天的放纵，毁掉昨天的努力。",
+  "每一次拒绝诱惑，都是对自己的投资。",
+  "好身材，是最高级的自律。",
+  "时间看得见，你的身体也看得见。",
+  "不积跬步，无以至千里。",
+  "坚持下去，你会爱上镜子里的自己。",
+  "梦想身材不是等来的，是练出来的。",
+  "你值得拥有更健康、更轻盈的人生。",
+  "每一个不曾运动的日子，都是对身体的辜负。",
+  "今天流的汗，都是明天穿的裙。"
+];
+function dayOfYear(d){
+  const start=new Date(d.getFullYear(),0,0);
+  return Math.floor((d-start)/(1000*60*60*24));
+}
+function renderQuote(){
+  const idx=dayOfYear(new Date())%QUOTES.length;
+  const q=QUOTES[idx];
+  const today=new Date();
+  const el=document.getElementById("quoteBar");
+  if(!el)return;
+  el.innerHTML=`<div class="q">${q}</div><div class="sub">${ymd0(today).slice(5).replace("-","/")} · 周${WEEK[today.getDay()]} · 每日一语</div>`;
+}
+
 function renderHero(){
   const s=getSettings();
   const latest=getLatestWeight();
@@ -567,7 +619,7 @@ function renderHero(){
 function renderMiniChart(){
   const weights=getAllWeights();
   const div=document.getElementById("miniChartDiv");
-  if(weights.length<2){div.innerHTML="";return;}
+  if(!div||weights.length<2){if(div)div.innerHTML="";return;}
   const recent=weights.slice(-14);
   const svg=drawWeightChart(recent,380,100,true);
   const panel=document.createElement("div");panel.className="panel";panel.style.marginBottom="14px";
@@ -730,6 +782,7 @@ function moduleStatus(key){
 }
 
 function renderHome(){
+  renderQuote();
   renderHero();
   const grid=document.getElementById("grid");grid.innerHTML="";
   MODULES.forEach(m=>{
